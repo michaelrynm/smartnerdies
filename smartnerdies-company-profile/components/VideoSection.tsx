@@ -6,7 +6,7 @@ export default function VideoSection() {
       {/* Header Section */}
       <div className="mt-6 sm:mt-8 lg:mt-10 mb-8 sm:mb-5 px-14">
         <p className="font-medium text-[#2E2C2C] text-base sm:text-lg mb-4 sm:mb-1">
-          Don't miss our <span className="text-[#1E75BD]">update</span>
+          Don&apos;t miss our <span className="text-[#1E75BD]">update</span>
         </p>
         <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
           <Image

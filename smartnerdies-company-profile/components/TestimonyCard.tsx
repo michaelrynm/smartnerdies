@@ -16,8 +16,8 @@ export default function TestimonyCard() {
 
       <div className="flex-grow flex flex-col">
         <p className="mt-3 sm:mt-5 text-[#2E2C2C] font-medium text-sm sm:text-base leading-relaxed flex-grow">
-          The progress tracker is fantastic. it's motivating to see how much
-          i've improved overtime. The app has a great mix of common and
+          The progress tracker is fantastic. it&apos;s motivating to see how much
+          i&apos;ve improved overtime. The app has a great mix of common and
           challenging words.
         </p>
 
