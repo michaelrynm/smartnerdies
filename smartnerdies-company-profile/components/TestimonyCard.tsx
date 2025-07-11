@@ -1,4 +1,3 @@
-import { Separator } from "@radix-ui/react-separator";
 import Image from "next/image";
 
 // Interface untuk TypeScript (opsional)
@@ -33,7 +32,7 @@ export default function TestimonyCard({
       {/* Content area */}
       <div className="flex-grow flex flex-col">
         <blockquote className="text-[#2A2D47] font-medium text-sm sm:text-base leading-relaxed flex-grow relative">
-          <span className="text-3xl text-blue-200 absolute -top-1 -left-1 font-serif leading-none">"</span>
+          <span className="text-3xl text-blue-200 absolute -top-1 -left-1 font-serif leading-none">&quot;</span>
           <span className="relative z-10 block pl-3">{testimony}</span>
         </blockquote>
 

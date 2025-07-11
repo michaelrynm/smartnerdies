@@ -43,7 +43,7 @@ export default function Testimoni() {
           className="w-full"
         >
           <CarouselContent className="-ml-2 sm:-ml-4">
-            {testimonyData.map((testimony, index) => (
+            {testimonyData.map((testimony) => (
               <CarouselItem
                 key={testimony.id}
                 className="pl-2 sm:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
@@ -67,7 +67,7 @@ export default function Testimoni() {
           className="w-full"
         >
           <CarouselContent className="-ml-2 sm:-ml-4">
-            {testimonyData.map((testimony, index) => (
+            {testimonyData.map((testimony) => (
               <CarouselItem
                 key={`second-${testimony.id}`}
                 className="pl-2 sm:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
