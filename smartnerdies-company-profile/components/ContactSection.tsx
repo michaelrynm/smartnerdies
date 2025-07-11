@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function ContactSection() {
@@ -33,46 +34,43 @@ export default function ContactSection() {
           {/* Left Section */}
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                Contact Us
+              <h1 className="text-6xl font-medium text-gray-900 mb-4">
+                Mulai Sekarang!
               </h1>
               <p className="text-gray-700 text-lg">
-                email, call, or complete the form to learn how
+                Hubungi kami dan konsultasi gratis dulu yuk!
                 <br />
                 Smartnerdies can solve your problem.
               </p>
             </div>
 
-            <div className="space-y-2">
-              <p className="text-gray-700">info@smartnerdies.mail.com</p>
-              <p className="text-gray-700">02112345</p>
+            <div className="space-y-1">
+              <p>Email:</p>
+              <p className="text-gray-700">smartnerdies@gmail.com</p>
             </div>
 
             {/* Services Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Customer Support
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipiscing elit.
-                </p>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Media inquiries
+              </h3>
+              <div className="flex items-center gap-2">
+                <Image
+                  src={"/tiktokLogo.svg"}
+                  alt="tiktok logo"
+                  width={24}
+                  height={24}
+                />
+                <p className="text-base text-gray-600">- Smartnerdies3</p>
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Feedback and suggestions
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipiscing elit.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Media inquiries
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipiscing elit.
-                </p>
+              <div className="flex items-center gap-2 mt-2">
+                <Image
+                  src={"/xLogo.png"}
+                  alt="tiktok logo"
+                  width={24}
+                  height={24}
+                />
+                <p className="text-base text-gray-600">- Smartnerd1es</p>
               </div>
             </div>
           </div>
@@ -152,9 +150,6 @@ export default function ContactSection() {
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm resize-none"
                 />
-                <div className="absolute bottom-3 right-3 text-xs text-gray-400">
-                  0/100
-                </div>
               </div>
 
               {/* Submit Button */}

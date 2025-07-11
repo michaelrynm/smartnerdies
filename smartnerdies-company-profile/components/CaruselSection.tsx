@@ -9,17 +9,34 @@ import {
   CarouselApi,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-export default function CarouselSection() {
+// Interface untuk data setiap slide
+interface SlideData {
+  id: string;
+  media: {
+    type: "image" | "video";
+    src: string;
+    alt: string;
+  };
+  title: string;
+  description: string;
+  tags: string[];
+  link?: string;
+}
+
+// Props interface untuk komponen
+interface CarouselSectionProps {
+  slides: SlideData[];
+}
+
+export default function CarouselSection({ slides }: CarouselSectionProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
-
-  const images: string[] = [
-    "https://picsum.photos/854/480?random=1",
-    "https://picsum.photos/854/480?random=2",
-    "https://picsum.photos/854/480?random=3",
-  ];
+  const [carouselHeight, setCarouselHeight] = useState<number>(480);
+  const mediaRefs = useRef<
+    (HTMLVideoElement | HTMLImageElement | HTMLIFrameElement | null)[]
+  >([]);
 
   useEffect(() => {
     if (!api) {
@@ -29,15 +46,72 @@ export default function CarouselSection() {
     setCurrent(api.selectedScrollSnap() + 1);
 
     api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1);
+      const newIndex = api.selectedScrollSnap();
+      setCurrent(newIndex + 1);
+      updateCarouselHeight(newIndex);
     });
+
+    // Set initial height
+    updateCarouselHeight(0);
   }, [api]);
+
+  // Fungsi untuk update tinggi carousel berdasarkan media yang aktif
+  const updateCarouselHeight = (index: number) => {
+    const mediaElement = mediaRefs.current[index];
+    if (mediaElement) {
+      const rect = mediaElement.getBoundingClientRect();
+      if (rect.height > 0) {
+        setCarouselHeight(rect.height);
+      }
+    }
+  };
+
+  // Fungsi untuk handle load event pada media
+  const handleMediaLoad = (index: number) => {
+    if (index === current - 1) {
+      updateCarouselHeight(index);
+    }
+  };
 
   const scrollTo = (index: number): void => {
     if (api) {
       api.scrollTo(index);
     }
   };
+
+  // Fungsi untuk render media (gambar atau video)
+  const renderMedia = (media: SlideData["media"], index: number) => {
+    if (media.type === "video") {
+      return (
+        <iframe
+          ref={(el) => {
+            mediaRefs.current[index] = el;
+          }}
+          src={media.src}
+          allow="autoplay; fullscreen"
+          allowFullScreen
+          className="w-full h-[480px] rounded-lg shadow-2xl"
+        />
+      );
+    } else {
+      return (
+        <Image
+          ref={(el) => {
+            mediaRefs.current[index] = el;
+          }}
+          src={media.src}
+          alt={media.alt}
+          width={854}
+          height={480}
+          className="object-cover w-full h-auto rounded-lg shadow-2xl"
+          onLoad={() => handleMediaLoad(index)}
+        />
+      );
+    }
+  };
+
+  // Ambil data slide yang sedang aktif
+  const currentSlide = slides[current - 1] || slides[0];
 
   return (
     <div className="bg-[#2E2C2C] py-8 sm:py-16 md:py-24 lg:py-36">
@@ -60,16 +134,10 @@ export default function CarouselSection() {
               setApi={setApi}
             >
               <CarouselContent className="-ml-2 md:-ml-4">
-                {images.map((src: string, index: number) => (
-                  <CarouselItem key={index} className="pl-2 md:pl-4">
-                    <div className="aspect-video">
-                      <Image
-                        src={src}
-                        alt={`Sample image ${index + 1}`}
-                        width={854}
-                        height={480}
-                        className="object-cover w-full h-full rounded-lg shadow-2xl"
-                      />
+                {slides.map((slide: SlideData, index: number) => (
+                  <CarouselItem key={slide.id} className="pl-2 md:pl-4">
+                    <div className="w-full" style={{ minHeight: "auto" }}>
+                      {renderMedia(slide.media, index)}
                     </div>
                   </CarouselItem>
                 ))}
@@ -80,7 +148,7 @@ export default function CarouselSection() {
 
             {/* Dot Navigation for Mobile - Horizontal */}
             <div className="flex justify-center gap-2 mt-4">
-              {images.map((_, index: number) => (
+              {slides.map((_, index: number) => (
                 <button
                   key={index}
                   onClick={() => scrollTo(index)}
@@ -95,30 +163,27 @@ export default function CarouselSection() {
             </div>
           </div>
 
-          {/* Content for Mobile */}
+          {/* Content for Mobile - Dynamic */}
           <div className="text-white text-center space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg sm:text-xl font-semibold text-white/90">
-                Project Title
+                {currentSlide?.title}
               </h3>
               <p className="text-white/80 leading-relaxed text-sm sm:text-base max-w-md mx-auto">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Doloremque tenetur, distinctio amet neque molestias officia
-                voluptates ipsum consectetur expedita.
+                {currentSlide?.description}
               </p>
             </div>
 
-            {/* Tags/Badges */}
+            {/* Tags/Badges - Dynamic */}
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-              <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#1F5582] text-white text-xs sm:text-sm font-medium rounded-full hover:bg-[#2a7bb8] transition-colors duration-200">
-                Web Design
-              </span>
-              <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#1F5582] text-white text-xs sm:text-sm font-medium rounded-full hover:bg-[#2a7bb8] transition-colors duration-200">
-                UI/UX
-              </span>
-              <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#1F5582] text-white text-xs sm:text-sm font-medium rounded-full hover:bg-[#2a7bb8] transition-colors duration-200">
-                React
-              </span>
+              {currentSlide?.tags.map((tag: string, index: number) => (
+                <span
+                  key={index}
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#1F5582] text-white text-xs sm:text-sm font-medium rounded-full hover:bg-[#2a7bb8] transition-colors duration-200"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
 
             {/* Call to Action */}
@@ -148,17 +213,14 @@ export default function CarouselSection() {
           {/* Carousel Section - Takes up more space */}
           <div className="flex items-center gap-4 xl:gap-6 flex-[2]">
             <Carousel orientation="vertical" className="w-full" setApi={setApi}>
-              <CarouselContent className="-mt-1 h-[360px] xl:h-[480px]">
-                {images.map((src: string, index: number) => (
-                  <CarouselItem key={index} className="pt-1 basis-full">
-                    <div className="h-full">
-                      <Image
-                        src={src}
-                        alt={`Sample image ${index + 1}`}
-                        width={854}
-                        height={480}
-                        className="object-cover w-full h-full rounded-lg shadow-2xl"
-                      />
+              <CarouselContent
+                className="-mt-1 transition-all duration-300 ease-in-out"
+                style={{ height: `${carouselHeight}px` }}
+              >
+                {slides.map((slide: SlideData, index: number) => (
+                  <CarouselItem key={slide.id} className="pt-1 basis-full">
+                    <div className="h-full flex items-center">
+                      {renderMedia(slide.media, index)}
                     </div>
                   </CarouselItem>
                 ))}
@@ -169,7 +231,7 @@ export default function CarouselSection() {
 
             {/* Dot Navigation */}
             <div className="flex flex-col gap-3 xl:gap-4">
-              {images.map((_, index: number) => (
+              {slides.map((_, index: number) => (
                 <button
                   key={index}
                   onClick={() => scrollTo(index)}
@@ -185,10 +247,16 @@ export default function CarouselSection() {
           </div>
 
           {/* Separator */}
-          <div className="w-[2px] xl:w-[3px] h-[360px] xl:h-[480px] bg-gradient-to-b from-[#1F5582] via-[#2a7bb8] to-[#1F5582] rounded-full shadow-lg flex-shrink-0" />
+          <div
+            className="w-[2px] xl:w-[3px] bg-gradient-to-b from-[#1F5582] via-[#2a7bb8] to-[#1F5582] rounded-full shadow-lg flex-shrink-0 transition-all duration-300 ease-in-out"
+            style={{ height: `${carouselHeight}px` }}
+          />
 
-          {/* Selected Works Section */}
-          <div className="flex-1 h-[360px] xl:h-[480px] flex flex-col justify-between text-white">
+          {/* Selected Works Section - Dynamic */}
+          <div
+            className="flex-1 flex flex-col justify-between text-white transition-all duration-300 ease-in-out"
+            style={{ height: `${carouselHeight}px` }}
+          >
             {/* Header */}
             <div className="space-y-2">
               <h2 className="text-2xl xl:text-3xl font-bold text-white mb-1">
@@ -197,30 +265,27 @@ export default function CarouselSection() {
               <div className="w-12 xl:w-16 h-1 bg-[#1F5582] rounded-full"></div>
             </div>
 
-            {/* Content */}
+            {/* Content - Dynamic */}
             <div className="flex-1 flex flex-col justify-center space-y-4 xl:space-y-6">
               <div className="space-y-3 xl:space-y-4">
                 <h3 className="text-lg xl:text-xl font-semibold text-white/90">
-                  Project Title
+                  {currentSlide?.title}
                 </h3>
                 <p className="text-white/80 leading-relaxed text-sm xl:text-base">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Doloremque tenetur, distinctio amet neque molestias officia
-                  voluptates ipsum consectetur expedita.
+                  {currentSlide?.description}
                 </p>
               </div>
 
-              {/* Tags/Badges */}
+              {/* Tags/Badges - Dynamic */}
               <div className="flex flex-wrap gap-2 xl:gap-3">
-                <span className="px-3 py-1.5 xl:px-4 xl:py-2 bg-[#1F5582] text-white text-xs xl:text-sm font-medium rounded-full hover:bg-[#2a7bb8] transition-colors duration-200">
-                  Web Design
-                </span>
-                <span className="px-3 py-1.5 xl:px-4 xl:py-2 bg-[#1F5582] text-white text-xs xl:text-sm font-medium rounded-full hover:bg-[#2a7bb8] transition-colors duration-200">
-                  UI/UX
-                </span>
-                <span className="px-3 py-1.5 xl:px-4 xl:py-2 bg-[#1F5582] text-white text-xs xl:text-sm font-medium rounded-full hover:bg-[#2a7bb8] transition-colors duration-200">
-                  React
-                </span>
+                {currentSlide?.tags.map((tag: string, index: number) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1.5 xl:px-4 xl:py-2 bg-[#1F5582] text-white text-xs xl:text-sm font-medium rounded-full hover:bg-[#2a7bb8] transition-colors duration-200"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
 

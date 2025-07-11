@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { useRef } from "react";
-
+import { testimonyData } from "@/lib/testimonyData";
 export default function Testimoni() {
   const plugin = useRef(
     AutoScroll({
@@ -43,12 +43,16 @@ export default function Testimoni() {
           className="w-full"
         >
           <CarouselContent className="-ml-2 sm:-ml-4">
-            {Array.from({ length: 10 }).map((_, index) => (
+            {testimonyData.map((testimony, index) => (
               <CarouselItem
-                key={index}
+                key={testimony.id}
                 className="pl-2 sm:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
               >
-                <TestimonyCard />
+                <TestimonyCard
+                  testimony={testimony.testimony}
+                  name={testimony.name}
+                  avatarColor={testimony.avatarColor}
+                />
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -56,19 +60,23 @@ export default function Testimoni() {
       </div>
 
       {/* Second Carousel Row */}
-      <div className="mt-4 sm:mt-6 w-full  mx-auto">
+      <div className="mt-4 sm:mt-6 w-full mx-auto">
         <Carousel
           plugins={[plugin2.current]}
           opts={{ loop: true }}
           className="w-full"
         >
           <CarouselContent className="-ml-2 sm:-ml-4">
-            {Array.from({ length: 10 }).map((_, index) => (
+            {testimonyData.map((testimony, index) => (
               <CarouselItem
-                key={index}
+                key={`second-${testimony.id}`}
                 className="pl-2 sm:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
               >
-                <TestimonyCard />
+                <TestimonyCard
+                  testimony={testimony.testimony}
+                  name={testimony.name}
+                  avatarColor={testimony.avatarColor}
+                />
               </CarouselItem>
             ))}
           </CarouselContent>

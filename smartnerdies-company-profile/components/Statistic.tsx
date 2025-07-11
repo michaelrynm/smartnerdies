@@ -5,30 +5,30 @@ export default function Statistic() {
         {/* Statistic 1 */}
         <div className="hover:scale-105 transition duration-300 ease-in-out text-center">
           <p className="font-semibold text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2 sm:mb-3 lg:mb-4">
-            10K
+            5K
           </p>
           <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl">
-            Active Users
+            Task Completed
           </p>
         </div>
 
         {/* Statistic 2 */}
         <div className="hover:scale-105 transition duration-300 ease-in-out text-center">
           <p className="font-semibold text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2 sm:mb-3 lg:mb-4">
-            #1
+            4.9
           </p>
           <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl">
-            Platform Choice
+            Average Rating
           </p>
         </div>
 
         {/* Statistic 3 */}
         <div className="hover:scale-105 transition duration-300 ease-in-out text-center">
           <p className="font-semibold text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2 sm:mb-3 lg:mb-4">
-            $25M
+            98%
           </p>
           <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl">
-            Revenue Generated
+            Satisfaction Rate
           </p>
         </div>
       </div>

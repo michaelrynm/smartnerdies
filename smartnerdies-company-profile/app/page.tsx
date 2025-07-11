@@ -6,17 +6,27 @@ import CarouselSection from "@/components/CaruselSection";
 import Testimoni from "@/components/Testimony";
 import VideoSection from "@/components/VideoSection";
 import ContactSection from "@/components/ContactSection";
+import { portfolioData } from "@/lib/carouselData";
+
 export default function Home() {
   return (
     <div>
       <Navbar />
       <Hero />
-      <Services />
+      <section id="services">
+        <Services />
+      </section>
       <Statistic />
-      <CarouselSection />
-      <Testimoni />
+      <section id="portfolio">
+        <CarouselSection slides={portfolioData} />
+      </section>
+      <section id="testimonials">
+        <Testimoni />
+      </section>
       <VideoSection />
-      <ContactSection />
+      <section id="contact">
+        <ContactSection />
+      </section>
     </div>
   );
 }
