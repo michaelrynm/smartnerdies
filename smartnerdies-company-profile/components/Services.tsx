@@ -1,4 +1,14 @@
 import Image from "next/image";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 export default function Services() {
   return (
@@ -50,9 +60,52 @@ export default function Services() {
               </button> */}
 
               {/* Outline Green Button */}
-              <button className="border border-[#78A62C] font-semibold rounded-3xl w-full sm:w-fit px-6 sm:px-7 py-2 sm:py-3 text-[#78A62C] text-sm transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-[#F3FAE6] hover:shadow-md active:scale-95">
-                Learn More
-              </button>
+              <Dialog>
+                <DialogTrigger className="border border-[#78A62C] font-semibold rounded-3xl w-full sm:w-fit px-6 sm:px-7 py-2 sm:py-3 text-[#78A62C] hover:text-[#78A62C] text-sm transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-[#F3FAE6] hover:shadow-md active:scale-95">
+                  Learn More
+                </DialogTrigger>
+
+                <DialogContent className="w-sm">
+                  <DialogHeader>
+                    <DialogTitle className="text-center text-xl">
+                      Smart Tutor, Smart Student
+                    </DialogTitle>
+                    <DialogDescription className="text-justify">
+                      Smartnerdies adalah lembaga belajar khusus mahasiswa yang
+                      siap membantu kamu mulai dari mengikuti kelas mata kuliah,
+                      lomba, menghadapi skripsi ataupun tesis, hingga menyiapkan
+                      karir yang sesuai passion
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex flex-col space-y-5">
+                    <Link href={"https://wa.me/6289684572757"}>
+                      <Button className="p-5 bg-white border border-[#78A62C] text-black rounded-xl hover:bg-[#78A62C] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Mau bimbingan dong admin 1
+                      </Button>
+                    </Link>
+                    <Link href={"https://wa.me/6283840128692"}>
+                      <Button className="p-5 bg-white border border-[#78A62C] text-black rounded-xl hover:bg-[#78A62C] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Mau bimbingan dong admin 2
+                      </Button>
+                    </Link>
+                    <Link href={"https://wa.me/6281572975183"}>
+                      <Button className="p-5 bg-white border border-[#78A62C] text-black rounded-xl hover:bg-[#78A62C] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Mau bimbingan dong admin 3
+                      </Button>
+                    </Link>
+                    <Link href={"https://wa.me/6281388224829"}>
+                      <Button className="p-5 bg-white border border-[#78A62C] text-black rounded-xl hover:bg-[#78A62C] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Mau bimbingan dong admin 4
+                      </Button>
+                    </Link>
+                    <Link href={"https://wa.me/6287781846811"}>
+                      <Button className="p-5 bg-white border border-[#78A62C] text-black rounded-xl hover:bg-[#78A62C] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Customer Service dan Pengaduan
+                      </Button>
+                    </Link>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
@@ -79,9 +132,54 @@ export default function Services() {
               </button> */}
 
               {/* Outline Button */}
-              <button className="border border-[#1E75BD] font-semibold rounded-3xl w-full sm:w-fit px-6 sm:px-7 py-2 sm:py-3 text-[#1E75BD] text-sm transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-[#E6F1FB] hover:shadow-md active:scale-95">
-                Learn More
-              </button>
+
+              <Dialog>
+                <DialogTrigger className="border border-[#1E75BD] font-semibold rounded-3xl w-full sm:w-fit px-6 sm:px-7 py-2 sm:py-3 text-[#1E75BD] hover:text-[#1E75BD] text-sm transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-[#E6F1FB] hover:shadow-md active:scale-95">
+                  Learn More
+                </DialogTrigger>
+
+                <DialogContent className="w-sm">
+                  <DialogHeader>
+                    <DialogTitle className="text-center text-xl">
+                      Smart Tutor, Smart Student
+                    </DialogTitle>
+                    <DialogDescription className="text-justify">
+                      Smartnerdies adalah lembaga belajar khusus mahasiswa yang
+                      siap membantu kamu mulai dari mengikuti kelas mata kuliah,
+                      lomba, menghadapi skripsi ataupun tesis, hingga menyiapkan
+                      karir yang sesuai passion
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex flex-col space-y-5">
+                    <Link href={"https://wa.me/6289684572757"}>
+                      <Button className="p-5 bg-white border border-[#1E75BD] text-black rounded-xl hover:bg-[#1E75BD] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Mau bimbingan dong admin 1
+                      </Button>
+                    </Link>
+
+                    <Link href={"https://wa.me/6283840128692"}>
+                      <Button className="p-5 bg-white border border-[#1E75BD] text-black rounded-xl hover:bg-[#1E75BD] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Mau bimbingan dong admin 2
+                      </Button>
+                    </Link>
+                    <Link href={"https://wa.me/6281572975183"}>
+                      <Button className="p-5 bg-white border border-[#1E75BD] text-black rounded-xl hover:bg-[#1E75BD] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Mau bimbingan dong admin 3
+                      </Button>
+                    </Link>
+                    <Link href={"https://wa.me/6281388224829"}>
+                      <Button className="p-5 bg-white border border-[#1E75BD] text-black rounded-xl hover:bg-[#1E75BD] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Mau bimbingan dong admin 4
+                      </Button>
+                    </Link>
+                    <Link href={"http://wa.me/6287781846811"}>
+                      <Button className="p-5 bg-white border border-[#1E75BD] text-black rounded-xl hover:bg-[#1E75BD] hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 w-full">
+                        Customer Service dan Pengaduan
+                      </Button>
+                    </Link>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
 

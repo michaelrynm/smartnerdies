@@ -6,6 +6,7 @@ import CarouselSection from "@/components/CaruselSection";
 import Testimoni from "@/components/Testimony";
 import VideoSection from "@/components/VideoSection";
 import ContactSection from "@/components/ContactSection";
+import Faq from "@/components/Faq";
 import { portfolioData } from "@/lib/carouselData";
 
 export default function Home() {
@@ -24,6 +25,9 @@ export default function Home() {
         <Testimoni />
       </section>
       <VideoSection />
+      <section>
+        <Faq />
+      </section>
       <section id="contact">
         <ContactSection />
       </section>

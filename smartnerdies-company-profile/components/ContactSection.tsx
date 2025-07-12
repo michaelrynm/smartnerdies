@@ -28,7 +28,7 @@ export default function ContactSection() {
   };
 
   return (
-    <div className="bg-blue-200 py-16 px-4 sm:px-6 lg:px-8 mt-5 lg:mt-32">
+    <div className="bg-blue-200 py-16 px-4 sm:px-6 lg:px-8 ">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Section */}

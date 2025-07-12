@@ -15,7 +15,7 @@ export const portfolioData = [
     id: "project-2",
     media: {
       type: "video" as const,
-      src: "/works/bimbingan.mp4",
+      src: "/works/Bimbingan.mp4",
       alt: "Smartnerdies Thumbnail",
     },
     title: "Online Mentoring",
