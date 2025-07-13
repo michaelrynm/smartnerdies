@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import { FaInstagram, FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -50,27 +52,20 @@ export default function ContactSection() {
             </div>
 
             {/* Services Grid */}
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Media inquiries
-              </h3>
+            <div className="space-y-4"> 
+              <h3 className="font-semibold text-gray-900">Media inquiries</h3>
               <div className="flex items-center gap-2">
-                <Image
-                  src={"/tiktokLogo.svg"}
-                  alt="tiktok logo"
-                  width={24}
-                  height={24}
-                />
-                <p className="text-base text-gray-600">- Smartnerdies3</p>
+                <FaInstagram className="w-6 h-6" />
+                <p className="text-base text-gray-600">- smartnerdies.ed</p>
               </div>
-              <div className="flex items-center gap-2 mt-2">
-                <Image
-                  src={"/xLogo.png"}
-                  alt="tiktok logo"
-                  width={24}
-                  height={24}
-                />
-                <p className="text-base text-gray-600">- Smartnerd1es</p>
+
+              <div className="flex items-center gap-2">
+                <FaTiktok className="w-6 h-6" />
+                <p className="text-base text-gray-600">- smartnerdies.ed</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaXTwitter className="w-6 h-6" />
+                <p className="text-base text-gray-600">- SmartnerdiesEdu</p>
               </div>
             </div>
           </div>
