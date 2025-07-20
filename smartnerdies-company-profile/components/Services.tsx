@@ -41,7 +41,7 @@ export default function Services() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            "WE HAVE THE BEST SERVICES IN TOWN"
+            &quot;WE HAVE THE BEST SERVICES IN TOWN&quot;
           </motion.p>
         </div>
       </motion.div>

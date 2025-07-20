@@ -89,7 +89,8 @@ export default function TestimonialSection() {
                     <span className="font-medium">A.R.</span>
                   </div>
                   <p className="italic">
-                    "Pembelajaran yang sangat efektif dan mudah dipahami!"
+                    &quot;Pembelajaran yang sangat efektif dan mudah
+                    dipahami!&quot;
                   </p>
                 </div>
                 <div className="text-xs text-gray-600">
@@ -102,7 +103,7 @@ export default function TestimonialSection() {
                     <span className="font-medium">M.D.</span>
                   </div>
                   <p className="italic">
-                    "Tim yang sangat membantu dan responsif."
+                    &quot;Tim yang sangat membantu dan responsif.&quot;
                   </p>
                 </div>
               </div>

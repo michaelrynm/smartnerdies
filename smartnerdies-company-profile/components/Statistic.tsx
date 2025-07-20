@@ -177,7 +177,6 @@ const StatisticCard = ({
 
 export default function Statistic() {
   const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: true, margin: "-50px" });
 
   return (
     <motion.div
