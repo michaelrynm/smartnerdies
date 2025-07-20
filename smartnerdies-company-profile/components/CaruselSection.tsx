@@ -33,7 +33,8 @@ interface CarouselSectionProps {
 export default function CarouselSection({ slides }: CarouselSectionProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
-  const [carouselHeight, setCarouselHeight] = useState<number>(480);
+  // Fixed height untuk portrait layout dengan ukuran yang lebih besar
+  const carouselHeight = 600; // Much larger size
   const mediaRefs = useRef<
     (HTMLVideoElement | HTMLImageElement | HTMLIFrameElement | null)[]
   >([]);
@@ -48,30 +49,8 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
     api.on("select", () => {
       const newIndex = api.selectedScrollSnap();
       setCurrent(newIndex + 1);
-      updateCarouselHeight(newIndex);
     });
-
-    // Set initial height
-    updateCarouselHeight(0);
   }, [api]);
-
-  // Fungsi untuk update tinggi carousel berdasarkan media yang aktif
-  const updateCarouselHeight = (index: number) => {
-    const mediaElement = mediaRefs.current[index];
-    if (mediaElement) {
-      const rect = mediaElement.getBoundingClientRect();
-      if (rect.height > 0) {
-        setCarouselHeight(rect.height);
-      }
-    }
-  };
-
-  // Fungsi untuk handle load event pada media
-  const handleMediaLoad = (index: number) => {
-    if (index === current - 1) {
-      updateCarouselHeight(index);
-    }
-  };
 
   const scrollTo = (index: number): void => {
     if (api) {
@@ -79,8 +58,12 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
     }
   };
 
-  // Fungsi untuk render media (gambar atau video)
+  // Fungsi untuk render media dengan ukuran portrait yang konsisten dan lebih besar
   const renderMedia = (media: SlideData["media"], index: number) => {
+    const commonClasses =
+      "w-full rounded-2xl shadow-2xl object-contain bg-gray-900/20"; // Changed to object-contain with background
+    const fixedSize = { width: 450, height: carouselHeight }; // Much larger portrait size
+
     if (media.type === "video") {
       return (
         <iframe
@@ -88,9 +71,10 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
             mediaRefs.current[index] = el;
           }}
           src={media.src}
-          allow="autoplay; fullscreen"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
           allowFullScreen
-          className="w-full h-[480px] rounded-lg shadow-2xl"
+          className={`${commonClasses} h-[${carouselHeight}px]`}
+          style={{ width: fixedSize.width, height: fixedSize.height }}
         />
       );
     } else {
@@ -101,10 +85,10 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
           }}
           src={media.src}
           alt={media.alt}
-          width={854}
-          height={480}
-          className="object-cover w-full h-auto rounded-lg shadow-2xl"
-          onLoad={() => handleMediaLoad(index)}
+          width={fixedSize.width}
+          height={fixedSize.height}
+          className={`${commonClasses} h-[${carouselHeight}px]`}
+          style={{ width: fixedSize.width, height: fixedSize.height }}
         />
       );
     }
@@ -127,16 +111,16 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
           </div>
 
           {/* Carousel for Mobile */}
-          <div className="relative">
+          <div className="relative flex justify-center">
             <Carousel
               orientation="horizontal"
-              className="w-full"
+              className="w-fit max-w-lg" // Increased for much larger size
               setApi={setApi}
             >
               <CarouselContent className="-ml-2 md:-ml-4">
                 {slides.map((slide: SlideData, index: number) => (
                   <CarouselItem key={slide.id} className="pl-2 md:pl-4">
-                    <div className="w-full" style={{ minHeight: "auto" }}>
+                    <div className="flex justify-center">
                       {renderMedia(slide.media, index)}
                     </div>
                   </CarouselItem>
@@ -147,7 +131,7 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
             </Carousel>
 
             {/* Dot Navigation for Mobile - Horizontal */}
-            <div className="flex justify-center gap-2 mt-4">
+            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex justify-center gap-2">
               {slides.map((_, index: number) => (
                 <button
                   key={index}
@@ -164,7 +148,7 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
           </div>
 
           {/* Content for Mobile - Dynamic */}
-          <div className="text-white text-center space-y-6">
+          <div className="text-white text-center space-y-6 mt-12">
             <div className="space-y-4">
               <h3 className="text-lg sm:text-xl font-semibold text-white/90">
                 {currentSlide?.title}
@@ -209,17 +193,17 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
         </div>
 
         {/* Desktop Layout (Side by side) */}
-        <div className="hidden lg:flex items-center gap-8 xl:gap-12">
-          {/* Carousel Section - Takes up more space */}
-          <div className="flex items-center gap-4 xl:gap-6 flex-[2]">
-            <Carousel orientation="vertical" className="w-full" setApi={setApi}>
+        <div className="hidden lg:flex items-center gap-8 xl:gap-12 justify-center">
+          {/* Carousel Section - Fixed portrait size */}
+          <div className="flex items-center gap-4 xl:gap-6">
+            <Carousel orientation="vertical" className="w-fit" setApi={setApi}>
               <CarouselContent
                 className="-mt-1 transition-all duration-300 ease-in-out"
                 style={{ height: `${carouselHeight}px` }}
               >
                 {slides.map((slide: SlideData, index: number) => (
                   <CarouselItem key={slide.id} className="pt-1 basis-full">
-                    <div className="h-full flex items-center">
+                    <div className="h-full flex items-center justify-center">
                       {renderMedia(slide.media, index)}
                     </div>
                   </CarouselItem>
@@ -248,13 +232,13 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
 
           {/* Separator */}
           <div
-            className="w-[2px] xl:w-[3px] bg-gradient-to-b from-[#1F5582] via-[#2a7bb8] to-[#1F5582] rounded-full shadow-lg flex-shrink-0 transition-all duration-300 ease-in-out"
+            className="w-[2px] xl:w-[3px] bg-gradient-to-b from-[#1F5582] via-[#2a7bb8] to-[#1F5582] rounded-full shadow-lg flex-shrink-0"
             style={{ height: `${carouselHeight}px` }}
           />
 
-          {/* Selected Works Section - Dynamic */}
+          {/* Selected Works Section - Fixed height dengan ukuran yang jauh lebih besar */}
           <div
-            className="flex-1 flex flex-col justify-between text-white transition-all duration-300 ease-in-out"
+            className="w-[28rem] xl:w-[32rem] flex flex-col justify-between text-white"
             style={{ height: `${carouselHeight}px` }}
           >
             {/* Header */}

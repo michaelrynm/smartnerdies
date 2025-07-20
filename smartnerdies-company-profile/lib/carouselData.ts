@@ -27,7 +27,7 @@ export const portfolioData = [
     id: "project-3",
     media: {
       type: "video" as const,
-      src: "https://player.cloudinary.com/embed/?cloud_name=djdeytg1y&public_id=works1_b3znjv&profile=cld-looping",
+      src: "https://player.cloudinary.com/embed/?cloud_name=djdeytg1y&public_id=works1_b3znjv&profile=cld-default",
       alt: "Mobile App Demo",
     },
     title: "Video Animation",

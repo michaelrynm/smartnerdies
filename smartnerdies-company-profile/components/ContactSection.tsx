@@ -1,15 +1,13 @@
 "use client";
 import { useState } from "react";
-import { FaInstagram, FaTiktok } from "react-icons/fa";
+import { FaInstagram, FaTiktok, FaStar } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-export default function ContactSection() {
+export default function TestimonialSection() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    message: "",
+    name: "",
+    testimonial: "",
+    rating: 5,
   });
 
   const handleInputChange = (
@@ -22,26 +20,33 @@ export default function ContactSection() {
     }));
   };
 
+  const handleRatingChange = (rating: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      rating: rating,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Handle form submission here
+    console.log("Testimonial submitted:", formData);
+    // Handle testimonial submission here
   };
 
   return (
-    <div className="bg-blue-200 py-16 px-4 sm:px-6 lg:px-8 ">
+    <div className="bg-blue-200 py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Section */}
           <div className="space-y-8">
             <div>
               <h1 className="text-6xl font-medium text-gray-900 mb-4">
-                Mulai Sekarang!
+                Bagikan Pengalaman!
               </h1>
               <p className="text-gray-700 text-lg">
-                Hubungi kami dan konsultasi gratis dulu yuk!
+                Ceritakan pengalaman belajar Anda bersama kami.
                 <br />
-                Smartnerdies can solve your problem.
+                Testimoni Anda sangat berarti untuk Smartnerdies.
               </p>
             </div>
 
@@ -50,118 +55,153 @@ export default function ContactSection() {
               <p className="text-gray-700">smartnerdies@gmail.com</p>
             </div>
 
-            {/* Services Grid */}
-            <div className="space-y-4"> 
-              <h3 className="font-semibold text-gray-900">Media inquiries</h3>
+            {/* Social Media */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-gray-900">Follow us</h3>
               <div className="flex items-center gap-2">
-                <FaInstagram className="w-6 h-6" />
-                <p className="text-base text-gray-600">- smartnerdies.ed</p>
+                <FaInstagram className="w-6 h-6 text-pink-600" />
+                <p className="text-base text-gray-600">smartnerdies.ed</p>
               </div>
 
               <div className="flex items-center gap-2">
-                <FaTiktok className="w-6 h-6" />
-                <p className="text-base text-gray-600">- smartnerdies.ed</p>
+                <FaTiktok className="w-6 h-6 text-gray-900" />
+                <p className="text-base text-gray-600">smartnerdies.ed</p>
               </div>
               <div className="flex items-center gap-2">
-                <FaXTwitter className="w-6 h-6" />
-                <p className="text-base text-gray-600">- SmartnerdiesEdu</p>
+                <FaXTwitter className="w-6 h-6 text-gray-900" />
+                <p className="text-base text-gray-600">SmartnerdiesEdu</p>
+              </div>
+            </div>
+
+            {/* Sample Testimonials Preview */}
+            <div className="bg-white/50 rounded-xl p-4 space-y-3">
+              <h4 className="font-medium text-gray-900 text-sm">
+                Testimoni Terbaru
+              </h4>
+              <div className="space-y-2">
+                <div className="text-xs text-gray-600">
+                  <div className="flex items-center gap-1 mb-1">
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} className="w-3 h-3" />
+                      ))}
+                    </div>
+                    <span className="font-medium">A.R.</span>
+                  </div>
+                  <p className="italic">
+                    "Pembelajaran yang sangat efektif dan mudah dipahami!"
+                  </p>
+                </div>
+                <div className="text-xs text-gray-600">
+                  <div className="flex items-center gap-1 mb-1">
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} className="w-3 h-3" />
+                      ))}
+                    </div>
+                    <span className="font-medium">M.D.</span>
+                  </div>
+                  <p className="italic">
+                    "Tim yang sangat membantu dan responsif."
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Section - Contact Form */}
+          {/* Right Section - Testimonial Form */}
           <div className="bg-white rounded-2xl p-8 shadow-lg">
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Get in touch
+                Tulis Testimoni Anda
               </h2>
-              <p className="text-gray-600 text-sm">You can reach us anytime.</p>
+              <p className="text-gray-600 text-sm">
+                Bagikan pengalaman Anda dengan layanan kami.
+              </p>
             </div>
 
-            <div className="space-y-4">
-              {/* Name Fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <input
-                    type="text"
-                    name="firstName"
-                    placeholder="First name"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
-                  />
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    name="lastName"
-                    placeholder="Last name"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
-                  />
-                </div>
-              </div>
-
-              {/* Email Field */}
+            <div className="space-y-5">
+              {/* Name/Initial Field */}
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nama atau Inisial
+                </label>
                 <input
-                  type="email"
-                  name="email"
-                  placeholder="Your email"
-                  value={formData.email}
+                  type="text"
+                  name="name"
+                  placeholder="Contoh: John Doe atau J.D."
+                  value={formData.name}
                   onChange={handleInputChange}
+                  required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
                 />
               </div>
 
-              {/* Phone Field */}
-              <div className="relative">
-                <div className="flex">
-                  <select className="px-3 py-3 border border-gray-300 rounded-l-lg bg-gray-50 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
-                    <option>+62</option>
-                    <option>+1</option>
-                    <option>+44</option>
-                  </select>
-                  <input
-                    type="tel"
-                    name="phone"
-                    placeholder=""
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="flex-1 px-4 py-3 border border-l-0 border-gray-300 rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
-                  />
+              {/* Rating Field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Rating Pengalaman
+                </label>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => handleRatingChange(star)}
+                      className="focus:outline-none"
+                    >
+                      <FaStar
+                        className={`w-6 h-6 transition-colors ${
+                          star <= formData.rating
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    </button>
+                  ))}
+                  <span className="ml-2 text-sm text-gray-600">
+                    ({formData.rating}/5)
+                  </span>
                 </div>
               </div>
 
-              {/* Message Field */}
-              <div className="relative">
+              {/* Testimonial Field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Testimoni Anda
+                </label>
                 <textarea
-                  name="message"
-                  placeholder="How can we help?"
-                  rows={4}
-                  value={formData.message}
+                  name="testimonial"
+                  placeholder="Ceritakan pengalaman Anda dengan layanan kami..."
+                  rows={5}
+                  value={formData.testimonial}
                   onChange={handleInputChange}
+                  required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm resize-none"
                 />
+                <div className="text-right text-xs text-gray-400 mt-1">
+                  {formData.testimonial.length}/500
+                </div>
               </div>
 
               {/* Submit Button */}
               <button
-                onClick={handleSubmit}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!formData.name.trim() || !formData.testimonial.trim()}
               >
-                Submit
+                Kirim Testimoni
               </button>
 
-              {/* Terms */}
+              {/* Privacy Note */}
               <p className="text-xs text-gray-500 text-center">
+                Testimoni Anda akan ditampilkan dengan nama/inisial yang Anda
+                berikan.
+                <br />
                 <span className="underline cursor-pointer">
-                  Terms of service
+                  Privacy Policy
                 </span>{" "}
-                and{" "}
-                <span className="underline cursor-pointer">Privacy Policy</span>{" "}
-                applied
+                berlaku.
               </p>
             </div>
           </div>
