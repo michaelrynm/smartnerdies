@@ -27,12 +27,6 @@ export default function TestimonialSection() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Testimonial submitted:", formData);
-    // Handle testimonial submission here
-  };
-
   return (
     <div className="bg-blue-200 py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
