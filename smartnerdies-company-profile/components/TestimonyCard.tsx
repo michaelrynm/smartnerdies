@@ -15,7 +15,7 @@ export default function TestimonyCard({
   icon = "/TestimonyCardIcon.png",
 }: TestimonyCardProps) {
   return (
-    <div className="group w-full max-w-sm mx-auto bg-gradient-to-br from-[#F8FAFF] to-[#F0F4FF] border border-white/50 rounded-2xl sm:rounded-3xl p-4 sm:p-5 h-full flex flex-col shadow-lg shadow-blue-100/30 hover:shadow-xl hover:shadow-blue-100/40 transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm">
+    <div className="group w-full max-w-sm mx-auto bg-gradient-to-br from-[#F8FAFF] to-[#F0F4FF] border border-white/50 rounded-2xl sm:rounded-3xl p-4 sm:p-5 flex flex-col shadow-lg shadow-blue-100/30 hover:shadow-xl hover:shadow-blue-100/40 transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm">
       {/* Header dengan icon */}
       <div className="flex-shrink-0 mb-3 sm:mb-4">
         <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/70 rounded-lg flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-300">

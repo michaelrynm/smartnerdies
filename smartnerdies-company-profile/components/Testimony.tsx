@@ -11,7 +11,7 @@ import { testimonyData } from "@/lib/testimonyData";
 export default function Testimoni() {
   const plugin = useRef(
     AutoScroll({
-      speed: 2,
+      speed: 0.5,
       startDelay: 2000,
       direction: "forward",
     })
@@ -19,14 +19,14 @@ export default function Testimoni() {
 
   const plugin2 = useRef(
     AutoScroll({
-      speed: 2,
+      speed: 0.5,
       startDelay: 2000,
       direction: "backward",
     })
   );
 
   return (
-    <div className="place-items-center bg-[#FFDCDC] py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8 lg:px-16">
+    <div className="place-items-center bg-[#FFDCDC] py-8 sm:py-12 md:py-10 px-4 sm:px-6 md:px-8 lg:px-16">
       <div className="max-w-7xl mx-auto">
         <p className="text-center font-semibold text-2xl sm:text-3xl lg:text-4xl mb-8 sm:mb-10 lg:mb-14 leading-tight">
           Word of praise from others <br className="hidden sm:block" />
@@ -42,7 +42,7 @@ export default function Testimoni() {
           opts={{ loop: true }}
           className="w-full"
         >
-          <CarouselContent className="-ml-2 sm:-ml-4">
+          <CarouselContent className="-ml-2 sm:-ml-4 py-3">
             {testimonyData.map((testimony) => (
               <CarouselItem
                 key={testimony.id}
@@ -66,7 +66,7 @@ export default function Testimoni() {
           opts={{ loop: true }}
           className="w-full"
         >
-          <CarouselContent className="-ml-2 sm:-ml-4">
+          <CarouselContent className="-ml-2 sm:-ml-4 py-3">
             {testimonyData.map((testimony) => (
               <CarouselItem
                 key={`second-${testimony.id}`}

@@ -25,7 +25,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="flex justify-between items-center font-medium bg-[#C7B6A7] px-4 sm:px-6 lg:px-12 py-2 text-[#2E2C2C]">
+      <div className="flex justify-between items-center font-medium bg-[#C7B6A7] px-4 sm:px-6 lg:px-12 py-2 text-[#2E2C2C] sticky top-0">
         {/* Logo Section */}
         <div className="flex items-center gap-2">
           <Image

@@ -14,7 +14,7 @@ export default function Faq() {
           <div className="inline-block p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-6">
             <div className="bg-white rounded-xl px-6 py-3">
               <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                FAQ about Us
+                FAQ
               </h1>
             </div>
           </div>
@@ -37,7 +37,7 @@ export default function Faq() {
               className="border border-blue-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-blue-50 to-indigo-50"
             >
               <AccordionTrigger className="px-6 py-5 hover:bg-blue-100/50 transition-colors duration-200 text-left font-semibold text-gray-800 hover:text-blue-700">
-                Q: Bimbingan ini tuh khusus mahasiswaja aja ya kak?
+                Q: Bimbingan ini tuh khusus mahasiswa aja ya kak?
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-5 pt-2">
                 <div className="bg-white/70 rounded-xl p-4 border-l-4 border-blue-400">

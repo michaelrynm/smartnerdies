@@ -12,6 +12,7 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Services() {
   return (
@@ -133,7 +134,7 @@ export default function Services() {
                       animate={{ opacity: 0 }}
                       whileHover={{ opacity: 1 }}
                     ></motion.div>
-                    <span className="relative">Learn More</span>
+                    <span className="relative">Mulai Sekarang!</span>
                   </motion.button>
                 </DialogTrigger>
 
@@ -166,7 +167,7 @@ export default function Services() {
                     transition={{ duration: 0.4, delay: 0.1 }}
                   >
                     <h3 className="font-semibold text-gray-800 mb-4 text-center">
-                      Pilih Admin untuk Konsultasi
+                      Pilih salah satu admin untuk Konsultasi
                     </h3>
                     <motion.div
                       className="space-y-3"
@@ -184,29 +185,34 @@ export default function Services() {
                       {[
                         {
                           href: "https://wa.me/6289684572757",
-                          label: "Admin 1",
+                          label: "Jeni",
                           number: "1",
+                          image: "/jeni.png",
                         },
                         {
                           href: "https://wa.me/6283840128692",
-                          label: "Admin 2",
+                          label: "Rhae",
                           number: "2",
+                          image: "/rhae.png",
                         },
                         {
                           href: "https://wa.me/6281572975183",
-                          label: "Admin 3",
+                          label: "Cuna",
                           number: "3",
+                          image: "/cuna.png",
                         },
                         {
                           href: "https://wa.me/6281388224829",
-                          label: "Admin 4",
+                          label: "Cheesya",
                           number: "4",
+                          image: "/cheesya.png",
                         },
                         {
                           href: "https://wa.me/6287781846811",
-                          label: "Customer Service",
+                          label: "Poet",
                           number: "CS",
                           subtitle: "Support & Pengaduan",
+                          image: "/poet.png",
                           isCS: true,
                         },
                       ].map((admin, index) => (
@@ -229,16 +235,17 @@ export default function Services() {
                             >
                               <Button className="w-full justify-between bg-white border border-gray-200 text-gray-800 rounded-2xl p-8 hover:border-[#78A62C]/50 hover:bg-[#78A62C]/5 hover:shadow-md transition-all duration-300 group">
                                 <div className="flex items-center gap-3">
-                                  <div
-                                    className={`w-8 h-8 ${
-                                      admin.isCS
-                                        ? "bg-orange-500"
-                                        : "bg-[#78A62C]"
-                                    } text-white rounded-full flex items-center justify-center ${
-                                      admin.isCS ? "text-xs" : "text-sm"
-                                    } font-semibold`}
-                                  >
-                                    {admin.number}
+                                  <div>
+                                    <Avatar
+                                      className={`${
+                                        admin.isCS
+                                          ? "bg-orange-500"
+                                          : "bg-[#78A62C]"
+                                      } w-10 h-10`}
+                                    >
+                                      <AvatarImage src={admin.image} />
+                                      <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
                                   </div>
                                   <div className="text-left">
                                     <div className="font-medium">
@@ -347,7 +354,7 @@ export default function Services() {
                       animate={{ opacity: 0 }}
                       whileHover={{ opacity: 1 }}
                     ></motion.div>
-                    <span className="relative">Learn More</span>
+                    <span className="relative">Mulai Sekarang!</span>
                   </motion.button>
                 </DialogTrigger>
 
@@ -380,7 +387,7 @@ export default function Services() {
                     transition={{ duration: 0.4, delay: 0.1 }}
                   >
                     <h3 className="font-semibold text-gray-800 mb-4 text-center">
-                      Pilih Admin untuk Konsultasi
+                      Pilih salah satu admin untuk Konsultasi
                     </h3>
                     <motion.div
                       className="space-y-3"
@@ -398,29 +405,34 @@ export default function Services() {
                       {[
                         {
                           href: "https://wa.me/6289684572757",
-                          label: "Admin 1",
+                          label: "Jeni",
                           number: "1",
+                          image: "/jeni.png",
                         },
                         {
                           href: "https://wa.me/6283840128692",
-                          label: "Admin 2",
+                          label: "Rhae",
                           number: "2",
+                          image: "/rhae.png",
                         },
                         {
                           href: "https://wa.me/6281572975183",
-                          label: "Admin 3",
+                          label: "Cuna",
                           number: "3",
+                          image: "/cuna.png",
                         },
                         {
                           href: "https://wa.me/6281388224829",
-                          label: "Admin 4",
+                          label: "Cheesya",
                           number: "4",
+                          image: "/cheesya.png",
                         },
                         {
                           href: "https://wa.me/6287781846811",
-                          label: "Customer Service",
+                          label: "Poet",
                           number: "CS",
                           subtitle: "Support & Pengaduan",
+                          image: "/poet.png",
                           isCS: true,
                         },
                       ].map((admin, index) => (
@@ -445,16 +457,17 @@ export default function Services() {
                                 className={`w-full justify-between bg-white border border-gray-200 text-gray-800 rounded-2xl p-8 hover:border-[#1E75BD]/50 hover:bg-[#1E75BD]/5 hover:shadow-md transition-all duration-300 group`}
                               >
                                 <div className="flex items-center gap-3">
-                                  <div
-                                    className={`w-8 h-8 ${
-                                      admin.isCS
-                                        ? "bg-orange-500"
-                                        : "bg-[#1E75BD]"
-                                    } text-white rounded-full flex items-center justify-center ${
-                                      admin.isCS ? "text-xs" : "text-sm"
-                                    } font-semibold`}
-                                  >
-                                    {admin.number}
+                                  <div>
+                                    <Avatar
+                                      className={`${
+                                        admin.isCS
+                                          ? "bg-orange-500"
+                                          : "bg-[#1E75BD]"
+                                      } w-10 h-10`}
+                                    >
+                                      <AvatarImage src={admin.image} />
+                                      <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
                                   </div>
                                   <div className="text-left">
                                     <div className="font-medium">

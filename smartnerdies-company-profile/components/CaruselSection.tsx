@@ -114,7 +114,7 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
           <div className="relative flex justify-center">
             <Carousel
               orientation="horizontal"
-              className="w-fit max-w-lg" // Increased for much larger size
+              className="w-fit max-w-xs" // Increased for much larger size
               setApi={setApi}
             >
               <CarouselContent className="-ml-2 md:-ml-4">

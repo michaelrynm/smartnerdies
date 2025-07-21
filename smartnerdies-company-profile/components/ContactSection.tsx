@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { FaInstagram, FaTiktok, FaStar } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import ContactSectionDialog from "./ContactSectionDialog";
 
 export default function TestimonialSection() {
   const [formData, setFormData] = useState({
@@ -42,6 +43,9 @@ export default function TestimonialSection() {
                 <br />
                 Testimoni Anda sangat berarti untuk Smartnerdies.
               </p>
+            </div>
+            <div>
+              <ContactSectionDialog />
             </div>
 
             <div className="space-y-1">
