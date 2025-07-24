@@ -39,6 +39,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "p16-common-sign-sg.tiktokcdn-us.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
