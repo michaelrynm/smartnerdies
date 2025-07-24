@@ -36,8 +36,6 @@ export default function Hero() {
     fetchHeroData();
   }, []);
 
-  console.log(heroData);
-
   // Fungsi untuk scroll ke section
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
