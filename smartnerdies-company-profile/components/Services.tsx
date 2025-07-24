@@ -13,8 +13,63 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+type ServiceData = {
+  Title: string;
+  Description: string;
+  Card_1_Title: string;
+  Card_1_Description: string;
+  Card_1_Image: {
+    url: string;
+  };
+  Card_2_Title: string;
+  Card_2_Description: string;
+  Card_2_Image: {
+    url: string;
+  };
+};
+
+type ModalDataItem = {
+  Link: string;
+  Name: string;
+  Image: {
+    url: string;
+  };
+};
 
 export default function Services() {
+  const [serviceData, setServicesData] = useState<ServiceData | null>(null);
+  const [modalData, setModalData] = useState<ModalDataItem[]>([]);
+
+  const fetchServicesData = async () => {
+    try {
+      const response = await axios.get(
+        "https://ambitious-desk-9046e01712.strapiapp.com/api/services?populate=*"
+      );
+      setServicesData(response.data.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchDialogData = async () => {
+    try {
+      const response = await axios.get(
+        "https://ambitious-desk-9046e01712.strapiapp.com/api/admin-modals?populate=*"
+      );
+      setModalData(response.data.data);
+    } catch (error) {
+      console.log("Fetch Dialog Data error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchServicesData();
+    fetchDialogData();
+  }, []);
+
   return (
     <div className="mt-8 sm:mt-12 lg:mt-16">
       {/* Header Section */}
@@ -33,7 +88,7 @@ export default function Services() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
-            Our Services
+            {serviceData?.Title}
           </motion.h2>
           <motion.p
             className="text-center text-xs sm:text-sm mt-2"
@@ -42,7 +97,7 @@ export default function Services() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            &quot;WE HAVE THE BEST SERVICES IN TOWN&quot;
+            {serviceData?.Description}
           </motion.p>
         </div>
       </motion.div>
@@ -70,13 +125,19 @@ export default function Services() {
               transition: { duration: 0.3 },
             }}
           >
-            <Image
-              src={"/academic.jpg"}
-              alt="Academic Assistant"
-              width={500}
-              height={400}
-              className="w-full h-full object-cover rounded-2xl"
-            />
+            {serviceData?.Card_1_Image?.url ? (
+              <Image
+                src={serviceData.Card_1_Image.url}
+                alt="Academic Assistant"
+                width={500}
+                height={400}
+                className="w-full h-full object-cover rounded-2xl"
+              />
+            ) : (
+              <div className="w-full h-full object-cover rounded-2xl flex items-center justify-center bg-gray-100">
+                <p className="text-gray-500">Image not available</p>
+              </div>
+            )}
           </motion.div>
 
           {/* Content */}
@@ -104,10 +165,7 @@ export default function Services() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.8 }}
             >
-              Pelayanan Asisten Akademik untuk tugas mahasiswa semua jurusan
-              bersama tenaga profesional di bidang masing-masing. Bersama
-              Smartnerdies, kamu bisa menyelesaikan tugas dengan tepat, cepat,
-              dan cerdas!
+              {serviceData?.Card_1_Description}
             </motion.p>
 
             <motion.div
@@ -182,40 +240,7 @@ export default function Services() {
                         },
                       }}
                     >
-                      {[
-                        {
-                          href: "https://wa.me/6289684572757",
-                          label: "Jeni",
-                          number: "1",
-                          image: "/jeni.png",
-                        },
-                        {
-                          href: "https://wa.me/6283840128692",
-                          label: "Rhae",
-                          number: "2",
-                          image: "/rhae.png",
-                        },
-                        {
-                          href: "https://wa.me/6281572975183",
-                          label: "Cuna",
-                          number: "3",
-                          image: "/cuna.png",
-                        },
-                        {
-                          href: "https://wa.me/6281388224829",
-                          label: "Cheesya",
-                          number: "4",
-                          image: "/cheesya.png",
-                        },
-                        {
-                          href: "https://wa.me/6287781846811",
-                          label: "Poet",
-                          number: "CS",
-                          subtitle: "Support & Pengaduan",
-                          image: "/poet.png",
-                          isCS: true,
-                        },
-                      ].map((admin, index) => (
+                      {modalData?.map((data, index) => (
                         <motion.div
                           key={index}
                           variants={{
@@ -223,7 +248,7 @@ export default function Services() {
                             visible: { opacity: 1, x: 0 },
                           }}
                         >
-                          <Link href={admin.href} className="block">
+                          <Link href={data.Link} className="block">
                             <motion.div
                               whileHover={{ scale: 1.02, x: 5 }}
                               whileTap={{ scale: 0.98 }}
@@ -238,33 +263,27 @@ export default function Services() {
                                   <div>
                                     <Avatar
                                       className={`${
-                                        admin.isCS
+                                        data.Name === "Poet"
                                           ? "bg-orange-500"
                                           : "bg-[#78A62C]"
                                       } w-10 h-10`}
                                     >
-                                      <AvatarImage src={admin.image} />
+                                      <AvatarImage src={data.Image.url} />
                                       <AvatarFallback>CN</AvatarFallback>
                                     </Avatar>
                                   </div>
                                   <div className="text-left">
                                     <div className="font-medium">
-                                      {admin.label}
+                                      {data.Name}
                                     </div>
-                                    {admin.subtitle && (
+                                    {data.Name === "Poet" && (
                                       <div className="text-xs text-gray-500">
-                                        {admin.subtitle}
+                                        Customer Support
                                       </div>
                                     )}
                                   </div>
                                 </div>
-                                <div
-                                  className={`w-4 h-4 text-gray-400 ${
-                                    admin.isCS
-                                      ? "group-hover:text-orange-500"
-                                      : "group-hover:text-[#78A62C]"
-                                  } transition-colors`}
-                                >
+                                <div className="group-hover:text-[#78A62C] transition-colors">
                                   <svg
                                     fill="none"
                                     stroke="currentColor"
@@ -314,7 +333,7 @@ export default function Services() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Mentoring
+              {serviceData?.Card_2_Title}
             </motion.h3>
 
             <motion.p
@@ -324,10 +343,7 @@ export default function Services() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
-              Pelayanan Mentoring untuk mahasiswa semua jurusan untuk keperluan
-              skripsi. Smartnerdies telah banyak mendampingi skripsi mahasiswa
-              dari mulai penentuan judul → metode → penyusunan bab → revisi →
-              sidang
+              {serviceData?.Card_2_Description}
             </motion.p>
 
             <motion.div
@@ -402,40 +418,7 @@ export default function Services() {
                         },
                       }}
                     >
-                      {[
-                        {
-                          href: "https://wa.me/6289684572757",
-                          label: "Jeni",
-                          number: "1",
-                          image: "/jeni.png",
-                        },
-                        {
-                          href: "https://wa.me/6283840128692",
-                          label: "Rhae",
-                          number: "2",
-                          image: "/rhae.png",
-                        },
-                        {
-                          href: "https://wa.me/6281572975183",
-                          label: "Cuna",
-                          number: "3",
-                          image: "/cuna.png",
-                        },
-                        {
-                          href: "https://wa.me/6281388224829",
-                          label: "Cheesya",
-                          number: "4",
-                          image: "/cheesya.png",
-                        },
-                        {
-                          href: "https://wa.me/6287781846811",
-                          label: "Poet",
-                          number: "CS",
-                          subtitle: "Support & Pengaduan",
-                          image: "/poet.png",
-                          isCS: true,
-                        },
-                      ].map((admin, index) => (
+                      {modalData.map((data, index) => (
                         <motion.div
                           key={index}
                           variants={{
@@ -443,7 +426,7 @@ export default function Services() {
                             visible: { opacity: 1, x: 0 },
                           }}
                         >
-                          <Link href={admin.href} className="block">
+                          <Link href={data.Link} className="block">
                             <motion.div
                               whileHover={{ scale: 1.02, x: 5 }}
                               whileTap={{ scale: 0.98 }}
@@ -460,32 +443,28 @@ export default function Services() {
                                   <div>
                                     <Avatar
                                       className={`${
-                                        admin.isCS
+                                        data.Name === "Poet"
                                           ? "bg-orange-500"
                                           : "bg-[#1E75BD]"
                                       } w-10 h-10`}
                                     >
-                                      <AvatarImage src={admin.image} />
+                                      <AvatarImage src={data.Image.url} />
                                       <AvatarFallback>CN</AvatarFallback>
                                     </Avatar>
                                   </div>
                                   <div className="text-left">
                                     <div className="font-medium">
-                                      {admin.label}
+                                      {data.Name}
                                     </div>
-                                    {admin.subtitle && (
+                                    {data.Name === "Poet" && (
                                       <div className="text-xs text-gray-500">
-                                        {admin.subtitle}
+                                        Customer Support
                                       </div>
                                     )}
                                   </div>
                                 </div>
                                 <div
-                                  className={`w-4 h-4 text-gray-400 ${
-                                    admin.isCS
-                                      ? "group-hover:text-orange-500"
-                                      : "group-hover:text-[#1E75BD]"
-                                  } transition-colors`}
+                                  className={`w-4 h-4 text-gray-400 "group-hover:text-[#1E75BD]" transition-colors`}
                                 >
                                   <svg
                                     fill="none"
@@ -525,13 +504,19 @@ export default function Services() {
               transition: { duration: 0.3 },
             }}
           >
-            <Image
-              src={"/mentor.jpg"}
-              alt="Academic Assistant"
-              width={500}
-              height={400}
-              className="w-full h-full object-cover rounded-2xl"
-            />
+            {serviceData?.Card_2_Image?.url ? (
+              <Image
+                src={serviceData.Card_2_Image.url}
+                alt="Academic Assistant"
+                width={500}
+                height={400}
+                className="w-full h-full object-cover rounded-2xl"
+              />
+            ) : (
+              <div className="w-full h-full object-cover rounded-2xl flex items-center justify-center bg-gray-100">
+                <p className="text-gray-500">Image not available</p>
+              </div>
+            )}
           </motion.div>
         </motion.div>
       </div>

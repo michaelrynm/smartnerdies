@@ -1,11 +1,42 @@
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import axios from "axios";
+
+type ModalDataItem = {
+  Link: string;
+  Name: string;
+  Image: {
+    url: string;
+  };
+};
 
 const ContactSectionDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [modalData, setModalData] = useState<ModalDataItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const admins = [
+  const fetchDialogData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        "https://ambitious-desk-9046e01712.strapiapp.com/api/admin-modals?populate=*"
+      );
+      setModalData(response.data.data);
+    } catch (error) {
+      console.log("Fetch Dialog Data error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDialogData();
+  }, []);
+
+  // Fallback static data (jika API gagal atau belum load)
+  const staticAdmins = [
     {
       href: "https://wa.me/6289684572757",
       label: "Jeni",
@@ -44,6 +75,37 @@ const ContactSectionDialog = () => {
       available: true,
     },
   ];
+
+  // Color palette untuk admin
+  const colorPalette = [
+    "from-blue-500 to-cyan-500",
+    "from-purple-500 to-pink-500",
+    "from-green-500 to-emerald-500",
+    "from-orange-500 to-red-500",
+    "from-indigo-500 to-purple-500",
+    "from-teal-500 to-blue-500",
+    "from-pink-500 to-rose-500",
+    "from-yellow-500 to-orange-500",
+  ];
+
+  // Fungsi untuk mengkonversi data API ke format yang dibutuhkan
+  const processApiData = () => {
+    if (!modalData || modalData.length === 0) {
+      return staticAdmins; // Fallback ke data statis
+    }
+
+    return modalData.map((item, index) => ({
+      href: item.Link,
+      label: item.Name,
+      image: item.Image?.url || "/default-avatar.png", // Fallback image
+      color: colorPalette[index % colorPalette.length], // Cycle through colors
+      available: true, // Bisa disesuaikan dengan data dari API jika ada field ini
+      isCS: item.Name.toLowerCase() === "poet", // Cek jika nama adalah "Poet"
+      role: item.Name.toLowerCase() === "poet" ? "Customer Support" : "Academic Consultant", // Role berdasarkan nama
+    }));
+  };
+
+  const admins = processApiData();
 
   return (
     <div className="flex justify-center items-center ">
@@ -209,117 +271,126 @@ const ContactSectionDialog = () => {
                     Choose Your Learning Partner
                   </h3>
 
-                  <motion.div
-                    className="space-y-4 max-h-80 overflow-y-auto px-3 py-1"
-                    initial="hidden"
-                    animate="visible"
-                    variants={{
-                      hidden: {},
-                      visible: {
-                        transition: {
-                          staggerChildren: 0.1,
-                        },
-                      },
-                    }}
-                  >
-                    {admins.map((admin, index) => (
+                  {/* Loading State */}
+                  {isLoading ? (
+                    <div className="flex justify-center items-center py-8">
                       <motion.div
-                        key={index}
-                        variants={{
-                          hidden: { opacity: 0, x: -30 },
-                          visible: { opacity: 1, x: 0 },
-                        }}
-                      >
-                        <motion.a
-                          href={admin.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+                        className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      />
+                      <span className="ml-3 text-gray-600">Loading consultants...</span>
+                    </div>
+                  ) : (
+                    <motion.div
+                      className="space-y-4 max-h-80 overflow-y-auto px-3 py-1"
+                      initial="hidden"
+                      animate="visible"
+                      variants={{
+                        hidden: {},
+                        visible: {
+                          transition: {
+                            staggerChildren: 0.1,
+                          },
+                        },
+                      }}
+                    >
+                      {admins.map((admin, index) => (
+                        <motion.div
+                          key={`${admin.label}-${index}`}
+                          variants={{
+                            hidden: { opacity: 0, x: -30 },
+                            visible: { opacity: 1, x: 0 },
+                          }}
                         >
-                          <div
-                            className={`relative overflow-hidden bg-white border-2 border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all duration-300 group ${
-                              admin.available
-                                ? "hover:border-blue-300"
-                                : "opacity-75"
-                            }`}
+                          <motion.a
+                            href={admin.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                           >
-                            <div className="flex items-center gap-4">
-                              {/* Avatar with gradient ring */}
-                              <div className="relative">
-                                <div
-                                  className={`absolute -inset-1 bg-gradient-to-r ${admin.color} rounded-full opacity-75 group-hover:opacity-100 transition-opacity`}
-                                />
-                                {/* <div className="relative w-14 h-14 bg-gray-200 rounded-full overflow-hidden">
+                            <div
+                              className={`relative overflow-hidden bg-white border-2 border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all duration-300 group ${
+                                admin.available
+                                  ? "hover:border-blue-300"
+                                  : "opacity-75"
+                              }`}
+                            >
+                              <div className="flex items-center gap-4">
+                                {/* Avatar with gradient ring */}
+                                <div className="relative">
                                   <div
-                                    className={`w-full h-full bg-gradient-to-br ${admin.color} flex items-center justify-center text-white font-bold text-lg`}
-                                  >
-                                    {admin.label.charAt(0)}
-                                  </div>
-                                </div> */}
-                                <Avatar>
-                                  <AvatarImage
-                                    className="w-14 h-14 relative"
-                                    src={admin.image}
+                                    className={`absolute -inset-1 bg-gradient-to-r ${admin.color} rounded-full opacity-75 group-hover:opacity-100 transition-opacity`}
                                   />
-                                  <AvatarFallback>{admin.label}</AvatarFallback>
-                                </Avatar>
-                              </div>
 
-                              {/* Info */}
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2">
-                                  <h4 className="font-semibold text-gray-800">
-                                    {admin.label}
-                                  </h4>
-                                  {admin.isCS && (
-                                    <span className="px-2 py-1 bg-orange-100 text-orange-600 text-xs rounded-full">
-                                      CS
-                                    </span>
-                                  )}
+                                  <Avatar>
+                                    <AvatarImage
+                                      className="w-14 h-14 relative rounded-full object-cover"
+                                      src={admin.image}
+                                      alt={admin.label}
+                                    />
+                                    <AvatarFallback className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-semibold">
+                                      {admin.label.charAt(0).toUpperCase()}
+                                    </AvatarFallback>
+                                  </Avatar>
                                 </div>
-                                <p className="text-sm text-gray-500">
-                                  {admin.role}
-                                </p>
+
+                                {/* Info */}
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <h4 className="font-semibold text-gray-800">
+                                      {admin.label}
+                                    </h4>
+                                    {admin.isCS && (
+                                      <span className="px-2 py-1 bg-orange-100 text-orange-600 text-xs rounded-full">
+                                        CS
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-gray-500">
+                                    {admin.role}
+                                  </p>
+                                </div>
+
+                                {/* Arrow */}
+                                <motion.div
+                                  className="text-gray-400 group-hover:text-blue-500 transition-colors"
+                                  animate={{ x: [0, 5, 0] }}
+                                  transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                  }}
+                                >
+                                  <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M9 5l7 7-7 7"
+                                    />
+                                  </svg>
+                                </motion.div>
                               </div>
 
-                              {/* Arrow */}
+                              {/* Hover effect */}
                               <motion.div
-                                className="text-gray-400 group-hover:text-blue-500 transition-colors"
-                                animate={{ x: [0, 5, 0] }}
-                                transition={{
-                                  duration: 2,
-                                  repeat: Infinity,
-                                  ease: "easeInOut",
-                                }}
-                              >
-                                <svg
-                                  className="w-5 h-5"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M9 5l7 7-7 7"
-                                  />
-                                </svg>
-                              </motion.div>
+                                className={`absolute inset-0 bg-gradient-to-r ${admin.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+                                initial={false}
+                              />
                             </div>
-
-                            {/* Hover effect */}
-                            <motion.div
-                              className={`absolute inset-0 bg-gradient-to-r ${admin.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
-                              initial={false}
-                            />
-                          </div>
-                        </motion.a>
-                      </motion.div>
-                    ))}
-                  </motion.div>
+                          </motion.a>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
 
                   {/* Footer */}
                   <motion.div

@@ -10,8 +10,45 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 
-// Interface untuk data setiap slide
+// Interface untuk data dari API
+interface ApiWorkData {
+  id: number;
+  documentId: string;
+  Work_Title: string;
+  Work_Description: string;
+  Work_Tag_1: string;
+  Work_Tag_2: string;
+  Work_Tag_3: string;
+  Work_Tag_4: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  Work_Image: Array<{
+    id: number;
+    documentId: string;
+    name: string;
+    alternativeText: string | null;
+    caption: string | null;
+    width: number | null;
+    height: number | null;
+    formats: unknown;
+    hash: string;
+    ext: string;
+    mime: string;
+    size: number;
+    url: string;
+    previewUrl: string | null;
+    provider: string;
+    provider_metadata: unknown;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  }>;
+}
+
+// Interface untuk data setiap slide (transformed)
 interface SlideData {
   id: string;
   media: {
@@ -25,19 +62,90 @@ interface SlideData {
   link?: string;
 }
 
-// Props interface untuk komponen
+// Props interface untuk komponen (sekarang optional karena data diambil dari API)
 interface CarouselSectionProps {
-  slides: SlideData[];
+  slides?: SlideData[];
 }
 
-export default function CarouselSection({ slides }: CarouselSectionProps) {
+export default function CarouselSection({
+  slides: propSlides,
+}: CarouselSectionProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
-  // Fixed height untuk portrait layout dengan ukuran yang lebih besar
-  const carouselHeight = 600; // Much larger size
+  const [slides, setSlides] = useState<SlideData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const carouselHeight = 600;
   const mediaRefs = useRef<
     (HTMLVideoElement | HTMLImageElement | HTMLIFrameElement | null)[]
   >([]);
+
+  // Function untuk mengubah data API menjadi format SlideData
+  const transformApiDataToSlides = (apiData: ApiWorkData[]): SlideData[] => {
+    return apiData.map((work) => {
+      // Ambil gambar/video pertama dari Work_Image array
+      const media = work.Work_Image[0];
+
+      // Tentukan tipe media berdasarkan mime type
+      const mediaType = media.mime.startsWith("video/") ? "video" : "image";
+
+      // Kumpulkan tags yang tidak kosong
+      const tags = [
+        work.Work_Tag_1,
+        work.Work_Tag_2,
+        work.Work_Tag_3,
+        work.Work_Tag_4,
+      ].filter((tag) => tag && tag.trim() !== "");
+
+      return {
+        id: work.documentId,
+        media: {
+          type: mediaType,
+          src: media.url,
+          alt: media.alternativeText || work.Work_Title || "Work image",
+        },
+        title: work.Work_Title,
+        description: work.Work_Description,
+        tags: tags,
+        link: `#work-${work.documentId}`, // Optional: bisa disesuaikan dengan kebutuhan
+      };
+    });
+  };
+
+  const fetchCarouselData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await axios.get(
+        "https://ambitious-desk-9046e01712.strapiapp.com/api/works?populate=*"
+      );
+
+      if (response.data && response.data.data) {
+        const transformedSlides = transformApiDataToSlides(response.data.data);
+        setSlides(transformedSlides);
+      } else {
+        setError("No data received from API");
+      }
+    } catch (error) {
+      console.error("Error fetching carousel data:", error);
+      setError("Failed to load carousel data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Effect untuk fetch data saat component mount
+  useEffect(() => {
+    // Jika ada slides dari props, gunakan itu. Jika tidak, fetch dari API
+    if (propSlides && propSlides.length > 0) {
+      setSlides(propSlides);
+      setLoading(false);
+    } else {
+      fetchCarouselData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propSlides]);
 
   useEffect(() => {
     if (!api) {
@@ -58,11 +166,10 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
     }
   };
 
-  // Fungsi untuk render media dengan ukuran portrait yang konsisten dan lebih besar
   const renderMedia = (media: SlideData["media"], index: number) => {
     const commonClasses =
-      "w-full rounded-2xl shadow-2xl object-contain bg-gray-900/20"; // Changed to object-contain with background
-    const fixedSize = { width: 450, height: carouselHeight }; // Much larger portrait size
+      "w-full rounded-2xl shadow-2xl object-contain bg-gray-900/20";
+    const fixedSize = { width: 450, height: carouselHeight };
 
     if (media.type === "video") {
       return (
@@ -94,6 +201,58 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
     }
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="bg-[#2E2C2C] py-8 sm:py-16 md:py-24 lg:py-36">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center h-96">
+            <div className="text-white text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1F5582] mx-auto mb-4"></div>
+              <p>Loading works...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="bg-[#2E2C2C] py-8 sm:py-16 md:py-24 lg:py-36">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center h-96">
+            <div className="text-white text-center">
+              <p className="text-red-400 mb-4">{error}</p>
+              <button
+                onClick={fetchCarouselData}
+                className="px-4 py-2 bg-[#1F5582] text-white rounded-lg hover:bg-[#2a7bb8] transition-colors"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No data state
+  if (!slides || slides.length === 0) {
+    return (
+      <div className="bg-[#2E2C2C] py-8 sm:py-16 md:py-24 lg:py-36">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center h-96">
+            <div className="text-white text-center">
+              <p>No works available at this time.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Ambil data slide yang sedang aktif
   const currentSlide = slides[current - 1] || slides[0];
 
@@ -114,7 +273,7 @@ export default function CarouselSection({ slides }: CarouselSectionProps) {
           <div className="relative flex justify-center">
             <Carousel
               orientation="horizontal"
-              className="w-fit max-w-xs" // Increased for much larger size
+              className="w-fit max-w-xs"
               setApi={setApi}
             >
               <CarouselContent className="-ml-2 md:-ml-4">

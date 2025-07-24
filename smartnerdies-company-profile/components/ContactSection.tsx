@@ -1,13 +1,31 @@
 "use client";
-import { useState } from "react";
-import { FaInstagram, FaTiktok, FaStar } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaInstagram, FaTiktok, FaStar, FaSpinner } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import ContactSectionDialog from "./ContactSectionDialog";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+
+type tLatestReview = {
+  id: number;
+  documentId: string;
+  name: string;
+  review: string;
+  rating: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+};
 
 export default function TestimonialSection() {
+  const [latestReview, setLatestReview] = useState<tLatestReview[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     name: "",
-    testimonial: "",
+    review: "",
     rating: 5,
   });
 
@@ -28,8 +46,50 @@ export default function TestimonialSection() {
     }));
   };
 
+  const handleSubmit = async () => {
+    const notify = () => toast.success("Review submitted successfully");
+
+    try {
+      setIsLoading(true);
+      const res = await axios.post(
+        "https://ambitious-desk-9046e01712.strapiapp.com/api/reviews",
+        { data: formData }
+      );
+      console.log(res);
+      if (res.status === 201) {
+        notify();
+      }
+    } catch (error) {
+      console.log("error submit review Data", error);
+    } finally {
+      setIsLoading(false);
+      setFormData({
+        name: "",
+        review: "",
+        rating: 5,
+      });
+      fetchLatestReview();
+    }
+  };
+
+  const fetchLatestReview = async () => {
+    try {
+      const res = await axios.get(
+        "https://ambitious-desk-9046e01712.strapiapp.com/api/reviews?sort[0]=createdAt:desc&pagination[limit]=2"
+      );
+      setLatestReview(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLatestReview();
+  }, []);
+
   return (
     <div className="bg-blue-200 py-16 px-4 sm:px-6 lg:px-8">
+      <ToastContainer />;
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Section */}
@@ -77,33 +137,28 @@ export default function TestimonialSection() {
                 Testimoni Terbaru
               </h4>
               <div className="space-y-2">
-                <div className="text-xs text-gray-600">
-                  <div className="flex items-center gap-1 mb-1">
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className="w-3 h-3" />
-                      ))}
+                {latestReview.map((reviews, i) => (
+                  <div key={i} className="text-xs text-gray-600">
+                    <div className="flex items-center gap-1 mb-1">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <FaStar
+                            key={i}
+                            className={`${
+                              reviews.rating >= i + 1
+                                ? "text-yellow-400"
+                                : "text-gray-300"
+                            } w-3 h-3`}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-medium">{reviews.name}</span>
+                      <span>-</span>
+                      <span>{dayjs(reviews.createdAt).fromNow()}</span>
                     </div>
-                    <span className="font-medium">A.R.</span>
+                    <p className="italic">&quot;{reviews.review}&quot;</p>
                   </div>
-                  <p className="italic">
-                    &quot;Pembelajaran yang sangat efektif dan mudah
-                    dipahami!&quot;
-                  </p>
-                </div>
-                <div className="text-xs text-gray-600">
-                  <div className="flex items-center gap-1 mb-1">
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className="w-3 h-3" />
-                      ))}
-                    </div>
-                    <span className="font-medium">M.D.</span>
-                  </div>
-                  <p className="italic">
-                    &quot;Tim yang sangat membantu dan responsif.&quot;
-                  </p>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -170,26 +225,33 @@ export default function TestimonialSection() {
                   Testimoni Anda
                 </label>
                 <textarea
-                  name="testimonial"
+                  name="review"
                   placeholder="Ceritakan pengalaman Anda dengan layanan kami..."
                   rows={5}
-                  value={formData.testimonial}
+                  value={formData.review}
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm resize-none"
                 />
                 <div className="text-right text-xs text-gray-400 mt-1">
-                  {formData.testimonial.length}/500
+                  {formData.review.length}/500
                 </div>
               </div>
 
               {/* Submit Button */}
               <button
+                onClick={handleSubmit}
                 type="submit"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!formData.name.trim() || !formData.testimonial.trim()}
+                disabled={isLoading || !formData.name || !formData.review}
               >
-                Kirim Testimoni
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <FaSpinner className="w-6 h-6 animate-spin" />
+                  </div>
+                ) : (
+                  "Submit"
+                )}
               </button>
 
               {/* Privacy Note */}

@@ -6,9 +6,41 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import AutoScroll from "embla-carousel-auto-scroll";
-import { useRef } from "react";
-import { testimonyData } from "@/lib/testimonyData";
+import { useRef, useEffect, useState } from "react";
+import axios from "axios";
+
+type ReviewData = {
+  id: number;
+  documentId: string;
+  name: string;
+  review: string;
+  rating: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+};
+
+
+
 export default function Testimoni() {
+  const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const fetchReviews = async () => {
+    try {
+      const res = await axios.get(
+        "https://ambitious-desk-9046e01712.strapiapp.com/api/reviews"
+      );
+      setReviews(res.data.data);
+    } catch (error) {
+      console.log("Error get reveiws data", error);
+    }
+  };
+
+  
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
   const plugin = useRef(
     AutoScroll({
       speed: 0.5,
@@ -43,15 +75,18 @@ export default function Testimoni() {
           className="w-full"
         >
           <CarouselContent className="-ml-2 sm:-ml-4 py-3">
-            {testimonyData.map((testimony) => (
+            {reviews.map((review) => (
               <CarouselItem
-                key={testimony.id}
+                key={review.id}
                 className="pl-2 sm:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
               >
                 <TestimonyCard
-                  testimony={testimony.testimony}
-                  name={testimony.name}
-                  avatarColor={testimony.avatarColor}
+                  review={review.review}
+                  name={review.name}
+                  avatarColor={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    review.name
+                  )}&background=random`}
+                  rating={review.rating}
                 />
               </CarouselItem>
             ))}
@@ -67,15 +102,18 @@ export default function Testimoni() {
           className="w-full"
         >
           <CarouselContent className="-ml-2 sm:-ml-4 py-3">
-            {testimonyData.map((testimony) => (
+            {reviews.map((review) => (
               <CarouselItem
-                key={`second-${testimony.id}`}
+                key={review.id}
                 className="pl-2 sm:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
               >
                 <TestimonyCard
-                  testimony={testimony.testimony}
-                  name={testimony.name}
-                  avatarColor={testimony.avatarColor}
+                  review={review.review}
+                  name={review.name}
+                  avatarColor={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    review.name
+                  )}&background=random`}
+                  rating={review.rating}
                 />
               </CarouselItem>
             ))}

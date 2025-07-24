@@ -7,7 +7,6 @@ import Testimoni from "@/components/Testimony";
 import VideoSection from "@/components/VideoSection";
 import ContactSection from "@/components/ContactSection";
 import Faq from "@/components/Faq";
-import { portfolioData } from "@/lib/carouselData";
 
 export default function Home() {
   return (
@@ -19,7 +18,7 @@ export default function Home() {
       </section>
       <Statistic />
       <section id="portfolio">
-        <CarouselSection slides={portfolioData} />
+        <CarouselSection />
       </section>
       <section id="testimonials">
         <Testimoni />
